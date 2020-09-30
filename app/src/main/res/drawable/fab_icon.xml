@@ -1,0 +1,98 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="512dp"
+            android:height="512dp"
+            android:viewportWidth="512"
+            android:viewportHeight="512">
+            <group android:name="group">
+                <path
+                    android:name="path_1"
+                    android:pathData="M 142.752 437.13 C 173.202 445.732 213.421 450.47 256 450.47 C 298.579 450.47 338.798 445.733 369.248 437.13 C 406.501 426.607 425.39 411.373 425.39 391.855 C 425.39 372.336 406.501 357.104 369.248 346.581 C 360.978 344.245 351.984 342.196 342.422 340.448 C 337.229 349.42 331.788 358.655 326.099 368.156 C 336.683 369.744 346.62 371.691 355.644 373.99 C 383.06 380.973 393.076 388.834 395.135 391.856 C 393.075 394.879 383.061 402.74 355.645 409.722 C 329.696 416.331 296.31 420.101 261.147 420.438 C 259.444 420.564 257.728 420.635 256 420.635 C 254.271 420.635 252.556 420.564 250.852 420.438 C 215.689 420.101 182.303 416.332 156.354 409.722 C 128.938 402.74 118.923 394.878 116.864 391.856 C 118.923 388.834 128.939 380.973 156.355 373.99 C 165.379 371.692 175.316 369.744 185.901 368.156 C 180.212 358.656 174.771 349.419 169.578 340.448 C 160.016 342.197 151.021 344.245 142.752 346.581 C 105.499 357.104 86.61 372.337 86.61 391.855 C 86.61 411.373 105.499 426.606 142.752 437.13 Z"
+                    android:fillColor="#ffffff"
+                    android:strokeWidth="1"/>
+                <path
+                    android:name="path"
+                    android:pathData="M 468.329 358.972 C 461.066 354.983 451.947 357.636 447.96 364.896 C 443.971 372.157 446.623 381.277 453.884 385.265 C 471.752 395.081 482 405.963 482 415.121 C 482 426.322 466.13 443.682 421.587 458.815 C 377.582 473.767 318.775 482 256 482 C 193.225 482 134.418 473.767 90.413 458.815 C 45.87 443.683 30 426.322 30 415.121 C 30 405.963 40.248 395.081 58.116 385.264 C 65.377 381.276 68.029 372.156 64.04 364.895 C 60.051 357.635 50.934 354.982 43.671 358.971 C 23.749 369.916 0 388.542 0 415.121 C 0 435.495 14.012 464.543 80.762 487.221 C 127.794 503.2 190.028 512 256 512 C 321.972 512 384.206 503.2 431.238 487.221 C 497.988 464.543 512 435.495 512 415.121 C 512 388.542 488.251 369.916 468.329 358.972 Z"
+                    android:fillColor="#ffffff"
+                    android:fillAlpha="0"
+                    android:strokeWidth="1"/>
+            </group>
+            <group android:name="group_1">
+                <path
+                    android:name="path_2"
+                    android:pathData="M 256 390.634 C 269.353 390.634 281.482 383.83 288.448 372.33 C 337.258 292.576 395.44 187.33 395.44 139.439 C 395.44 62.552 332.888 0 256 0 C 179.112 0 116.56 62.552 116.56 139.439 C 116.56 187.33 174.743 292.576 223.552 372.433 C 230.518 383.83 242.648 390.634 256 390.634 Z M 199.953 129.865 C 199.953 98.962 225.096 73.82 256 73.82 C 286.904 73.82 312.047 98.962 312.047 129.865 C 312.047 160.769 286.904 185.911 256 185.911 C 225.096 185.911 199.953 160.77 199.953 129.865 Z"
+                    android:fillColor="#ffffff"
+                    android:strokeWidth="1"/>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="path_1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:duration="400"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="path">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:startOffset="200"
+                android:duration="300"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:valueType="floatType"
+                android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+    <target android:name="path_2">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:duration="150"
+                    android:valueFrom="0"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:startOffset="150"
+                    android:duration="300"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="group_1">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:duration="150"
+                    android:valueFrom="0"
+                    android:valueTo="-60"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+                <objectAnimator
+                    android:propertyName="translateY"
+                    android:startOffset="150"
+                    android:duration="300"
+                    android:valueFrom="-60"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

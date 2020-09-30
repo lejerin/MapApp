@@ -1,12 +1,10 @@
 package com.example.mapapp.ui.login
 
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.mapapp.R
@@ -14,10 +12,12 @@ import com.example.mapapp.ui.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 
-class LoginActivity : AppCompatActivity() , View.OnClickListener, SignInDialog.SignInClickListener{
+class LoginActivity : AppCompatActivity() , View.OnClickListener
+    , SignInDialog.SignInClickListener, SignUpDialog.SignUpClickListener{
 
     private lateinit var viewModel: LoginViewModel
-    lateinit var dialog : SignInDialog
+    lateinit var signInDialog : SignInDialog
+    lateinit var signUpDialog : SignUpDialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,13 @@ class LoginActivity : AppCompatActivity() , View.OnClickListener, SignInDialog.S
 
         viewModel.loginResponseData.observe(this, Observer {
             Toast.makeText(this, it.ID.toString() , Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            signInDialog.dismiss()
+            goMainActivity()
+        })
+
+        viewModel.signUpResponseData.observe(this, Observer {
+            Toast.makeText(this, it.ID.toString() , Toast.LENGTH_SHORT).show()
+            signInDialog.dismiss()
             goMainActivity()
         })
 
@@ -44,23 +50,32 @@ class LoginActivity : AppCompatActivity() , View.OnClickListener, SignInDialog.S
             R.id.btn_signin -> {
 
                 val fm = supportFragmentManager
-                dialog = SignInDialog(this)
-                dialog.show(fm, "sign in")
+                signInDialog = SignInDialog(this)
+                signInDialog.show(fm, "sign in")
             }
             R.id.btn_signup -> {
 
+                val fm = supportFragmentManager
+                signUpDialog = SignUpDialog(this)
+                signUpDialog.show(fm, "sign up")
             }
         }
     }
 
     override fun onSignIn(id: String, pw: String) {
-        viewModel.startLogin(id, pw)
+        viewModel.startSignIn(id, pw)
     }
 
-    fun goMainActivity(){
+    override fun onSignUp(id: String, pw: String) {
+        viewModel.startSignUp(id, pw)
+    }
+
+    private fun goMainActivity(){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
+
+
 
 }

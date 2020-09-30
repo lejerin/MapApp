@@ -6,15 +6,15 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import com.example.mapapp.R
-import kotlinx.android.synthetic.main.signin_fragment_dialog.view.*
+import kotlinx.android.synthetic.main.signup_fragment_dialog.view.*
 
 
-class SignInDialog(
-    private val clickListener: SignInClickListener
+class SignUpDialog(
+    private val clickListener: SignUpClickListener
 ) : DialogFragment() {
 
-    interface SignInClickListener {
-        fun onSignIn(id: String, pw: String)
+    interface SignUpClickListener {
+        fun onSignUp(id: String, pw: String)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +23,7 @@ class SignInDialog(
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.signin_fragment_dialog, container, false)
+        return inflater.inflate(R.layout.signup_fragment_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -68,7 +68,7 @@ class SignInDialog(
         view.btn_sign_in.setOnClickListener {
 
             hideSoftKeyBoard()
-            clickListener.onSignIn(view.text_email.text.toString(), view.text_pw.text.toString())
+            clickListener.onSignUp(view.text_email.text.toString(), view.text_pw.text.toString())
 
         }
     }

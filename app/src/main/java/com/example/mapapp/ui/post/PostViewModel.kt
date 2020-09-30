@@ -1,4 +1,4 @@
-package com.example.mapapp.ui.login
+package com.example.mapapp.ui.post
 
 import android.view.KeyEvent
 import android.view.View
@@ -12,7 +12,7 @@ import com.example.mapapp.data.model.User
 import com.example.mapapp.util.Coroutines
 import kotlinx.coroutines.Job
 
-class LoginViewModel(
+class PostViewModel(
 ) : ViewModel() {
 
     private lateinit var job: Job
@@ -21,7 +21,7 @@ class LoginViewModel(
     val loginResponseData : LiveData<User>
         get() = _loginData
 
-    fun startSignIn(id: String, password: String){
+    fun sendPost(id: String, password: String){
         if(id.isNotEmpty() && password.isNotEmpty()){
 //            job = Coroutines.ioThenMain(
 //                { repository.login(id!!, LoginRequest(id!!,password!!)) },
@@ -34,22 +34,6 @@ class LoginViewModel(
         }
     }
 
-    private val _signUpData = MutableLiveData<User>()
-    val signUpResponseData : LiveData<User>
-        get() = _signUpData
-
-    fun startSignUp(id: String, password: String){
-        if(id.isNotEmpty() && password.isNotEmpty()){
-//            job = Coroutines.ioThenMain(
-//                { repository.login(id!!, LoginRequest(id!!,password!!)) },
-//                {
-//                    _loginData.value = it
-//                }
-//            )
-
-            _signUpData.value = User("happy", "pw")
-        }
-    }
 
 
     override fun onCleared() {
