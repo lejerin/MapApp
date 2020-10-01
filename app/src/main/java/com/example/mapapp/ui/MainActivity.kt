@@ -13,6 +13,7 @@ import com.example.mapapp.R
 import com.example.mapapp.ui.home.HomeFragment
 import com.example.mapapp.ui.like.LikeFragment
 import com.example.mapapp.ui.post.PostActivity
+import com.example.mapapp.ui.setting.SettingFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -21,6 +22,9 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
         HomeFragment()
     private val likeFragment: LikeFragment =
         LikeFragment()
+    private val settingFragment: SettingFragment =
+        SettingFragment()
+
     private lateinit var selectedBtn: ImageButton
     private var selectedNum = 0
 
@@ -33,6 +37,8 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
         setFragment(homeFragment)
 
         selectedBtn = btn_home
+        setBtnAnimation(selectedBtn, vectors[0])
+
 
         fab.setOnClickListener(this)
         btn_home.setOnClickListener(this)
@@ -65,6 +71,8 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
             }
             R.id.btn_setting -> {
                 toggleBtn(btn_setting, 3)
+                setFragment(settingFragment)
+                System.out.println("cdd")
             }
         }
     }

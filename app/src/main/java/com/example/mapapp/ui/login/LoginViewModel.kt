@@ -10,44 +10,49 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mapapp.data.model.User
 import com.example.mapapp.util.Coroutines
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Job
 
 class LoginViewModel(
+
 ) : ViewModel() {
 
     private lateinit var job: Job
+    private lateinit var auth: FirebaseAuth
 
-    private val _loginData = MutableLiveData<User>()
-    val loginResponseData : LiveData<User>
+
+    fun setAuth(auth: FirebaseAuth){
+        this.auth = auth
+    }
+
+
+    private val _loginData = MutableLiveData<Task<AuthResult>>()
+    val loginResponseData : LiveData<Task<AuthResult>>
         get() = _loginData
 
-    fun startSignIn(id: String, password: String){
-        if(id.isNotEmpty() && password.isNotEmpty()){
-//            job = Coroutines.ioThenMain(
-//                { repository.login(id!!, LoginRequest(id!!,password!!)) },
-//                {
-//                    _loginData.value = it
-//                }
-//            )
+    fun startSignIn(email: String, password: String){
+        if(email.isNotEmpty() && password.isNotEmpty()){
 
-            _loginData.value = User("happy", "pw")
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener {task ->
+                    _loginData.value = task
+                }
+
         }
     }
 
-    private val _signUpData = MutableLiveData<User>()
-    val signUpResponseData : LiveData<User>
+    private val _signUpData = MutableLiveData<Task<AuthResult>>()
+    val signUpResponseData : LiveData<Task<AuthResult>>
         get() = _signUpData
 
-    fun startSignUp(id: String, password: String){
-        if(id.isNotEmpty() && password.isNotEmpty()){
-//            job = Coroutines.ioThenMain(
-//                { repository.login(id!!, LoginRequest(id!!,password!!)) },
-//                {
-//                    _loginData.value = it
-//                }
-//            )
-
-            _signUpData.value = User("happy", "pw")
+    fun startSignUp(email: String, password: String){
+        if(email.isNotEmpty() && password.isNotEmpty()){
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener {task ->
+                    _signUpData.value = task
+                }
         }
     }
 
