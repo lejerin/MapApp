@@ -102,9 +102,9 @@ class SignInDialog(
 
 
         check = check && setErrorText(v.signin_name_input, email.isEmpty(), "이메일 주소를 입력해주세요.")
-        check = check && setErrorText(v.signup_email_input, !InputUtil.isEmail(email), "이메일 형식이 아닙니다.")
+        check = check && setErrorText(v.signin_name_input, !InputUtil.isEmail(email), "이메일 형식이 아닙니다.")
         check = check && setErrorText(v.signin_pw_input, pw.isEmpty(), "비밀번호를 입력해주세요")
-        check = check && setErrorText(v.signup_pw_input, !InputUtil.isValidPW(pw), "최소 6자리의 비밀번호를 입력해주세요.")
+        check = check && setErrorText(v.signin_pw_input, !InputUtil.isValidPW(pw), "최소 6자리의 비밀번호를 입력해주세요.")
 
         return check
     }

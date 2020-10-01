@@ -97,7 +97,7 @@ class SignUpDialog(
         val email = v.text_email.text.toString()
         val name = v.text_name.text.toString()
         val pw = v.text_pw.text.toString()
-        val pw_check = v.text_pw_check.text.toString()
+        val pwCheck = v.text_pw_check.text.toString()
 
 
         check = check && setErrorText(v.signup_email_input, email.isEmpty(), "이메일 주소를 입력해주세요.")
@@ -105,10 +105,10 @@ class SignUpDialog(
         check = check && setErrorText(v.signup_name_input, name.isEmpty(), "이름을 입력해주세요.")
         check = check && setErrorText(v.signup_pw_input, pw.isEmpty(), "비밀번호를 입력해주세요.")
         check = check && setErrorText(v.signup_pw_input, !isValidPW(pw), "최소 6자리의 비밀번호를 입력해주세요.")
-        check = check && setErrorText(v.signup_pw_check_input, pw_check.isEmpty(), "비밀번호 확인을 입력해주세요.")
+        check = check && setErrorText(v.signup_pw_check_input, pwCheck.isEmpty(), "비밀번호 확인을 입력해주세요.")
 
-       if(pw.isNotEmpty() && pw_check.isNotEmpty()){
-           check = check && setErrorText(v.signup_pw_check_input, pw != pw_check,
+       if(pw.isNotEmpty() && pwCheck.isNotEmpty()){
+           check = check && setErrorText(v.signup_pw_check_input, pw != pwCheck,
                "비밀번호와 비밀번호 확인이 다릅니다.")
        }
 
