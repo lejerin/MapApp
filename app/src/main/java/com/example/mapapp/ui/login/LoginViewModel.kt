@@ -2,34 +2,30 @@ package com.example.mapapp.ui.login
 
 import android.content.Intent
 import android.util.Log
-import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mapapp.base.BaseViewModel
 import com.example.mapapp.data.repositories.LoginRepository
-import com.example.mapapp.util.startMainActivity
 import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
-import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.kakao.sdk.auth.model.OAuthToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_login.*
+
 
 class LoginViewModel(
     private val repository: LoginRepository
-) : BaseViewModel() {
+) : BaseViewModel() ,  EmailSignInDialog.SignInClickListener, EmailSignUpDialog.SignUpClickListener{
 
     private val TAG = "LoginViewModel"
-
 
     //auth listener
     var authListener: EmailSignListener? = null
 
+    //이메일 회원가입, 로그인을 위한 다이얼로그
+    private lateinit var emailSignInDialog: EmailSignInDialog
+    private lateinit var emailSignUpDialog: EmailSignUpDialog
 
     fun emailSignIn(email: String?, password: String?) {
 
@@ -48,10 +44,12 @@ class LoginViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 //sending a success callback
+                emailSignInDialog.receiveResult(true, "")
                 authListener?.onSuccess(1)
             }, {
                 //sending a failure callback
-                authListener?.onFailure(1, it.message!!)
+                emailSignInDialog.receiveResult(false,
+                    "Authentication failed.\n${it.message!!}")
             })
         addDisposable(disposable)
     }
@@ -66,9 +64,11 @@ class LoginViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
+                emailSignUpDialog.receiveResult(true, "")
                 authListener?.onSuccess(2)
             }, {
-                authListener?.onFailure(2, it.message!!)
+                emailSignUpDialog.receiveResult(false,
+                    "Authentication failed.\n${it.message!!}")
             })
         addDisposable(disposable)
     }
@@ -132,6 +132,26 @@ class LoginViewModel(
 
     }
 
+
+    fun showSignInDialog(view: View) {
+        val fm = (view.context as AppCompatActivity).supportFragmentManager
+        emailSignInDialog = EmailSignInDialog(this)
+        emailSignInDialog.show(fm, "sign in")
+    }
+
+    fun showSignUpDialog(view: View) {
+        val fm = (view.context as AppCompatActivity).supportFragmentManager
+        emailSignUpDialog = EmailSignUpDialog(this)
+        emailSignUpDialog.show(fm, "sign up")
+    }
+
+    override fun inputSignInData(email: String, pw: String) {
+        emailSignIn(email, pw)
+    }
+
+    override fun inputSignUpData(email: String, pw: String) {
+        emailSignUp(email, pw)
+    }
 
 
 }

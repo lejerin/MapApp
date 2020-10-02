@@ -1,7 +1,6 @@
 package com.example.mapapp.ui
 
 import android.content.Intent
-import android.graphics.PorterDuff
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.view.View
@@ -10,18 +9,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.mapapp.R
-import com.example.mapapp.ui.home.HomeFragment
-import com.example.mapapp.ui.like.LikeFragment
+import com.example.mapapp.ui.map.MapFragment
+import com.example.mapapp.ui.time.TimeFragment
 import com.example.mapapp.ui.post.PostActivity
 import com.example.mapapp.ui.setting.SettingFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() , View.OnClickListener {
-    private val homeFragment: HomeFragment =
-        HomeFragment()
-    private val likeFragment: LikeFragment =
-        LikeFragment()
+    private val homeFragment: MapFragment =
+        MapFragment()
+    private val likeFragment: TimeFragment =
+        TimeFragment()
     private val settingFragment: SettingFragment =
         SettingFragment()
 

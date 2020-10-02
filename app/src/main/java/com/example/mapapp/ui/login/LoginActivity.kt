@@ -23,8 +23,7 @@ import com.example.mapapp.util.startMainActivity
 import org.kodein.di.android.kodein
 import org.kodein.di.KodeinAware
 
-class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListener
-    , EmailSignInDialog.SignInClickListener, EmailSignUpDialog.SignUpClickListener, EmailSignListener, KodeinAware {
+class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListener, EmailSignListener, KodeinAware {
     override val layoutResourceId: Int
         get() = R.layout.activity_login
 
@@ -35,9 +34,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
 
     private val TAG = "LoginActivity"
 
-    //이메일 회원가입, 로그인을 위한 다이얼로그
-    lateinit var emailSignInDialog: EmailSignInDialog
-    lateinit var emailSignUpDialog: EmailSignUpDialog
 
     //파이어베이스 인증 instance
     private val auth: FirebaseAuth by lazy {
@@ -67,7 +63,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
         viewModel.authListener = this
         viewDataBinding.loginVM = viewModel
 
-
     }
 
     override fun initAfterBinding() {
@@ -85,43 +80,22 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
     override fun onSuccess(method: Int) {
         //  progressbar.visibility = View.GONE
 
-        when(method){
-            1-> {
-                setLoginPlatform("E")
-                emailSignInDialog.receiveResult(true, "")
+        setLoginPlatform(
+            when(method){
+                1, 2->  "E"
+                3-> "G"
+                4-> "F"
+                else -> ""
             }
-            2-> {
-                setLoginPlatform("E")
-                emailSignUpDialog.receiveResult(true, "")
-            }
-            3-> {
-                setLoginPlatform("G")
-            }
-            4-> {
-                setLoginPlatform("F")
-            }
-        }
-        startMainActivity()
+        )
 
+        startMainActivity()
 
     }
 
     override fun onFailure(method: Int, message: String) {
         //    progressbar.visibility = View.GONE
-        when(method){
-            1-> {
-                emailSignInDialog.receiveResult(false,
-                    "Authentication failed.\n${message}")
-            }
-            2-> {
-                emailSignUpDialog.receiveResult(false,
-                    "Authentication failed.\n${message}")
-            }
-            else-> {
-                Toast.makeText(this, "Authentication failed.\n${message}", Toast.LENGTH_SHORT).show()
-            }
-        }
-
+        Toast.makeText(this, "Authentication failed.\n${message}", Toast.LENGTH_SHORT).show()
     }
 
 
@@ -139,18 +113,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
 
     override fun onClick(v: View) {
         when(v.id){
-            R.id.btn_signin -> {
-
-                val fm = supportFragmentManager
-                emailSignInDialog = EmailSignInDialog(this)
-                emailSignInDialog.show(fm, "sign in")
-            }
-            R.id.btn_signup -> {
-
-                val fm = supportFragmentManager
-                emailSignUpDialog = EmailSignUpDialog(this)
-                emailSignUpDialog.show(fm, "sign up")
-            }
             R.id.btn_fake_google -> {
                 googleSignIn()
             }
@@ -161,14 +123,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
                 signInKakao()
             }
         }
-    }
-
-    override fun inputSignInData(email: String, pw: String) {
-        viewModel.emailSignIn(email, pw)
-    }
-
-    override fun inputSignUpData(email: String, pw: String) {
-        viewModel.emailSignUp(email, pw)
     }
 
 
@@ -197,7 +151,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
 
 
     }
-
 
 
     private fun initLoginFacebook(){
