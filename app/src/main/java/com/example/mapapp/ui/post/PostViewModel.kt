@@ -1,15 +1,9 @@
 package com.example.mapapp.ui.post
 
-import android.view.KeyEvent
-import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.AdapterView
-import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mapapp.data.model.User
-import com.example.mapapp.util.Coroutines
+import com.example.mapapp.data.login.User
 import kotlinx.coroutines.Job
 
 class PostViewModel(
@@ -30,7 +24,7 @@ class PostViewModel(
 //                }
 //            )
 
-            _loginData.value = User("happy", "pw")
+//            _loginData.value = User("happy", "pw")
         }
     }
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.mapapp.R
 import com.example.mapapp.ui.login.LoginActivity
+import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -59,6 +60,7 @@ class SettingFragment : Fragment() {
                 Firebase.auth.signOut()
             }
             "F" -> {
+                LoginManager.getInstance().logOut();
                 Firebase.auth.signOut()
             }
         }

@@ -1,25 +1,18 @@
 package com.example.mapapp.ui.login
 
-import android.view.KeyEvent
-import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.widget.AdapterView
-import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.mapapp.data.model.User
-import com.example.mapapp.util.Coroutines
+import com.example.mapapp.base.BaseViewModel
+import com.example.mapapp.base.DataModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Job
 
-class LoginViewModel(
+class LoginViewModel(private val model: DataModel) : BaseViewModel() {
 
-) : ViewModel() {
+    private val TAG = "LoginViewModel"
 
-    private lateinit var job: Job
+
     private lateinit var auth: FirebaseAuth
 
 
@@ -41,6 +34,8 @@ class LoginViewModel(
                 }
 
         }
+
+
     }
 
     private val _signUpData = MutableLiveData<Task<AuthResult>>()
@@ -57,8 +52,6 @@ class LoginViewModel(
     }
 
 
-    override fun onCleared() {
-        super.onCleared()
-        if(::job.isInitialized) job.cancel()
-    }
+
+
 }

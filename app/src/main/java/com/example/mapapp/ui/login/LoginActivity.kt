@@ -1,12 +1,9 @@
 package com.example.mapapp.ui.login
 
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.mapapp.R
 import com.example.mapapp.ui.MainActivity
 import com.facebook.AccessToken
@@ -26,85 +23,91 @@ import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.auth.LoginClient
 import com.kakao.sdk.auth.model.OAuthToken
 import kotlinx.android.synthetic.main.activity_login.*
-import android.content.SharedPreferences
+import androidx.lifecycle.Observer
+import com.example.mapapp.base.BaseActivity
+import com.example.mapapp.databinding.ActivityLoginBinding
+import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
+class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() , View.OnClickListener
+    , EmailSignInDialog.SignInClickListener, EmailSignUpDialog.SignUpClickListener {
+    override val layoutResourceId: Int
+        get() = R.layout.activity_login
+    override val viewModel: LoginViewModel by viewModel()
 
+    private val TAG = "LoginActivity"
 
+    //이메일 회원가입, 로그인을 위한 다이얼로그
+    lateinit var emailSignInDialog: EmailSignInDialog
+    lateinit var emailSignUpDialog: EmailSignUpDialog
 
-class LoginActivity : AppCompatActivity() , View.OnClickListener
-    , SignInDialog.SignInClickListener, SignUpDialog.SignUpClickListener{
-
+    //파이어베이스 인증 instance
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var viewModel: LoginViewModel
-    lateinit var signInDialog : SignInDialog
-    lateinit var signUpDialog : SignUpDialog
-
+    //구글 로그인
     private lateinit var googleSignInClient : GoogleSignInClient
     private val RC_SIGN_IN = 9001
 
+    //페이스북 로그인
     private lateinit var callbackManager: CallbackManager
 
+    override fun initStartView() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        auth = Firebase.auth
-
-
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        viewModel.setAuth(auth)
+        initFirebase()
+        initLoginGoogle()
+        initLoginFacebook()
+    }
 
 
-        //구글 로그인
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
+    override fun initDataBinding() {
+        //파이어베이스 로그인 Observer
+        viewModel.loginResponseData.observe(this, Observer {task ->
+            if (task.isSuccessful) {
+                setLoginPlatform("E")
+                goMainActivity()
+                emailSignInDialog.receiveResult(true, "")
 
-        //페이스북 로그인
-        callbackManager = CallbackManager.Factory.create()
-
-        btn_sign_facebook.setReadPermissions("email", "public_profile")
-        btn_sign_facebook.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-            override fun onSuccess(loginResult: LoginResult) {
-//                Log.d(TAG, "facebook:onSuccess:$loginResult")
-                handleFacebookAccessToken(loginResult.accessToken)
-            }
-
-            override fun onCancel() {
-//                Log.d(TAG, "facebook:onCancel")
-                // ...
-            }
-
-            override fun onError(error: FacebookException) {
-//                Log.d(TAG, "facebook:onError", error)
-                // ...
+            } else {
+                emailSignInDialog.receiveResult(false,
+                    "Authentication failed.\n${task.exception.toString()}")
             }
         })
 
+        //파이어베이스 회원가입 Observer
+        viewModel.signUpResponseData.observe(this, Observer {task ->
+            if (task.isSuccessful) {
+                setLoginPlatform("E")
+                goMainActivity()
+                emailSignUpDialog.receiveResult(true, "")
 
-        btn_signup.setOnClickListener(this)
-        btn_signin.setOnClickListener(this)
-        btn_sign_google.setOnClickListener(this)
-        btn_sign_kakao.setOnClickListener(this)
+            } else {
+                emailSignUpDialog.receiveResult(false,
+                    "Authentication failed.\n${task.exception.toString()}")
+            }
+        })
 
     }
+
+    override fun initAfterBinding() {
+        btn_signup.setOnClickListener(this)
+        btn_signin.setOnClickListener(this)
+        btn_fake_facebook.setOnClickListener(this)
+        btn_fake_google.setOnClickListener(this)
+        btn_sign_kakao.setOnClickListener(this)
+    }
+
 
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if(currentUser != null){
-            Toast.makeText(this, "자동 로그인", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "자동 로그인 성공", Toast.LENGTH_SHORT).show()
             goMainActivity()
         }
     }
 
     private fun googleSignIn() {
-
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
@@ -118,16 +121,84 @@ class LoginActivity : AppCompatActivity() , View.OnClickListener
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
-             //   Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
-            //    Log.w(TAG, "Google sign in failed", e)
-                // ...
+                Log.w(TAG, "Google sign in failed", e)
+
             }
         }
         // Pass the activity result back to the Facebook SDK
         callbackManager.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onClick(v: View) {
+        when(v.id){
+            R.id.btn_signin -> {
+
+                val fm = supportFragmentManager
+                emailSignInDialog = EmailSignInDialog(this)
+                emailSignInDialog.show(fm, "sign in")
+            }
+            R.id.btn_signup -> {
+
+                val fm = supportFragmentManager
+                emailSignUpDialog = EmailSignUpDialog(this)
+                emailSignUpDialog.show(fm, "sign up")
+            }
+            R.id.btn_fake_google -> {
+                googleSignIn()
+            }
+            R.id.btn_fake_facebook -> {
+                btn_sign_facebook.performClick()
+            }
+            R.id.btn_sign_kakao -> {
+                signInKakao()
+            }
+        }
+    }
+
+    override fun inputSignInData(email: String, pw: String) {
+        viewModel.startSignIn(email, pw)
+    }
+
+    override fun inputSignUpData(email: String, pw: String) {
+        viewModel.startSignUp(email, pw)
+    }
+
+    private fun initFirebase() {
+        auth = Firebase.auth
+        viewModel.setAuth(auth)
+    }
+
+    private fun initLoginGoogle(){
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+
+    private fun initLoginFacebook(){
+        callbackManager = CallbackManager.Factory.create()
+
+        btn_sign_facebook.setReadPermissions("email", "public_profile")
+        btn_sign_facebook.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                Log.d(TAG, "facebook:onSuccess:$loginResult")
+                handleFacebookAccessToken(loginResult.accessToken)
+            }
+
+            override fun onCancel() {
+                Log.d(TAG, "facebook:onCancel")
+            }
+
+            override fun onError(error: FacebookException) {
+                Log.d(TAG, "facebook:onError", error)
+            }
+        })
+
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
@@ -138,43 +209,34 @@ class LoginActivity : AppCompatActivity() , View.OnClickListener
                     // Sign in success, update UI with the signed-in user's information
                     setLoginPlatform("G")
                     goMainActivity()
-
-
                 } else {
-
-//                    // If sign in fails, display a message to the user.
-//                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-//                    // ...
-//                    Snackbar.make(view, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
-//                    updateUI(null)
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Snackbar.make(view, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
                 }
-
             }
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
-     //   Log.d(TAG, "handleFacebookAccessToken:$token")
+        Log.d(TAG, "handleFacebookAccessToken:$token")
 
         val credential = FacebookAuthProvider.getCredential(token.token)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
+                    val user = auth.currentUser
                     setLoginPlatform("F")
                     goMainActivity()
 
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d("qqq", "signInWithCredential:success")
-//                    val user = auth.currentUser
-//                    updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w("dd", "signInWithCredential:failure", task.exception)
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
                     Toast.makeText(baseContext, "Authentication failed.",
                         Toast.LENGTH_SHORT).show()
-//                    updateUI(null)
-                }
 
-                // ...
+                }
             }
     }
 
@@ -185,22 +247,21 @@ class LoginActivity : AppCompatActivity() , View.OnClickListener
 
             if (error != null) {
 
-               // Log.e(TAG, "로그인 실패", error)
+                Log.e(TAG, "로그인 실패", error)
 
             }
 
             else if (token != null) {
 
-              //  Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                Log.i(TAG, "로그인 성공 ${token.accessToken}")
                 setLoginPlatform("K")
-            goMainActivity()
+                goMainActivity()
             }
 
         }
 
 
-
-// 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+        // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
 
         if (LoginClient.instance.isKakaoTalkLoginAvailable(this)) {
 
@@ -214,38 +275,6 @@ class LoginActivity : AppCompatActivity() , View.OnClickListener
     }
 
 
-    override fun onClick(v: View) {
-        when(v.id){
-            R.id.btn_signin -> {
-
-                val fm = supportFragmentManager
-                signInDialog = SignInDialog(this, viewModel)
-                signInDialog.show(fm, "sign in")
-            }
-            R.id.btn_signup -> {
-
-                val fm = supportFragmentManager
-                signUpDialog = SignUpDialog(this, viewModel)
-                signUpDialog.show(fm, "sign up")
-            }
-            R.id.btn_sign_google -> {
-                googleSignIn()
-            }
-            R.id.btn_sign_kakao -> {
-                signInKakao()
-            }
-        }
-    }
-
-    override fun successSignIn() {
-        setLoginPlatform("E")
-        goMainActivity()
-    }
-
-    override fun successSignUp() {
-        setLoginPlatform("E")
-        goMainActivity()
-    }
 
     private fun goMainActivity(){
         val intent = Intent(this, MainActivity::class.java)
@@ -258,7 +287,6 @@ class LoginActivity : AppCompatActivity() , View.OnClickListener
         editor.putString("login", value)
         editor.commit()
     }
-
 
 
 }

@@ -10,22 +10,27 @@ import androidx.lifecycle.Observer
 import com.example.mapapp.R
 import com.example.mapapp.util.InputUtil
 import com.example.mapapp.util.InputUtil.setErrorText
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.signin_fragment_dialog.view.*
 import kotlinx.android.synthetic.main.signin_fragment_dialog.view.btn_close
 import kotlinx.android.synthetic.main.signin_fragment_dialog.view.btn_sign_in
 import kotlinx.android.synthetic.main.signin_fragment_dialog.view.text_email
 import kotlinx.android.synthetic.main.signin_fragment_dialog.view.text_pw
-import kotlinx.android.synthetic.main.signup_fragment_dialog.view.*
 
 
-class SignInDialog(
-    private val clickListener: SignInClickListener,
-    private val viewModel: LoginViewModel
+class EmailSignInDialog(
+    private val clickListener: SignInClickListener
 ) : DialogFragment() {
 
     interface SignInClickListener {
-        fun successSignIn()
+        fun inputSignInData(email: String, pw: String)
+    }
+
+    fun receiveResult(isSuccess: Boolean, message: String){
+        if(isSuccess){
+            dismiss()
+        }else{
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,15 +45,7 @@ class SignInDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.loginResponseData.observe(this, Observer {task ->
-            if (task.isSuccessful) {
-                clickListener.successSignIn()
-                dismiss()
-            } else {
-                Toast.makeText(context, "Authentication failed.\n${task.exception.toString()}",
-                    Toast.LENGTH_SHORT).show()
-            }
-        })
+
 
         setupClickListeners(view)
 
@@ -86,7 +83,7 @@ class SignInDialog(
 
             hideSoftKeyBoard()
             if(checkValidInput(view)){
-                viewModel.startSignIn(view.text_email.text.toString(), view.text_pw.text.toString())
+                clickListener.inputSignInData(view.text_email.text.toString(), view.text_pw.text.toString())
             }
 
 

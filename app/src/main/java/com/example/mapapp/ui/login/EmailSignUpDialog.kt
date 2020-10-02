@@ -11,17 +11,23 @@ import com.example.mapapp.R
 import com.example.mapapp.util.InputUtil.isEmail
 import com.example.mapapp.util.InputUtil.isValidPW
 import com.example.mapapp.util.InputUtil.setErrorText
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.signup_fragment_dialog.view.*
 
 
-class SignUpDialog(
-    private val clickListener: SignUpClickListener,
-    private val viewModel: LoginViewModel
+class EmailSignUpDialog(
+    private val clickListener: SignUpClickListener
 ) : DialogFragment() {
 
     interface SignUpClickListener {
-        fun successSignUp()
+        fun inputSignUpData(email: String, pw: String)
+    }
+
+    fun receiveResult(isSuccess: Boolean, message: String){
+        if(isSuccess){
+            dismiss()
+        }else{
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,17 +42,7 @@ class SignUpDialog(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.signUpResponseData.observe(this, Observer {task ->
-            if (task.isSuccessful) {
-                clickListener.successSignUp()
-                dismiss()
-            } else {
-                Toast.makeText(context, "Authentication failed.\n${task.exception.toString()}",
-                    Toast.LENGTH_SHORT).show()
-            }
-        })
         setupClickListeners(view)
-
 
     }
 
@@ -82,7 +78,7 @@ class SignUpDialog(
             hideSoftKeyBoard()
 
             if(checkValidInput(view)){
-                viewModel.startSignUp(view.text_email.text.toString(), view.text_pw.text.toString())
+                clickListener.inputSignUpData(view.text_email.text.toString(), view.text_pw.text.toString())
             }
 
 
