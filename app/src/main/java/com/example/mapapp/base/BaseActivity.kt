@@ -8,9 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
 
-abstract class BaseActivity<T : ViewDataBinding, R : BaseViewModel> : AppCompatActivity() {
+abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     lateinit var viewDataBinding: T
+
 
     /**
      * setContentView로 호출할 Layout의 리소스 Id.
@@ -21,7 +22,7 @@ abstract class BaseActivity<T : ViewDataBinding, R : BaseViewModel> : AppCompatA
     /**
      * viewModel 로 쓰일 변수.
      */
-    abstract val viewModel: R
+
 
     /**
      * 레이아웃을 띄운 직후 호출.
@@ -51,6 +52,7 @@ abstract class BaseActivity<T : ViewDataBinding, R : BaseViewModel> : AppCompatA
 
         viewDataBinding = DataBindingUtil.setContentView(this, layoutResourceId)
         viewDataBinding.lifecycleOwner = this@BaseActivity
+
 
         initStartView()
         initDataBinding()

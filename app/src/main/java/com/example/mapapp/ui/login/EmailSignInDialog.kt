@@ -6,10 +6,9 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import com.example.mapapp.R
-import com.example.mapapp.util.InputUtil
-import com.example.mapapp.util.InputUtil.setErrorText
+import com.example.mapapp.util.InputCheckUtils
+import com.example.mapapp.util.InputCheckUtils.setErrorText
 import kotlinx.android.synthetic.main.signin_fragment_dialog.view.*
 import kotlinx.android.synthetic.main.signin_fragment_dialog.view.btn_close
 import kotlinx.android.synthetic.main.signin_fragment_dialog.view.btn_sign_in
@@ -99,9 +98,9 @@ class EmailSignInDialog(
 
 
         check = check && setErrorText(v.signin_name_input, email.isEmpty(), "이메일 주소를 입력해주세요.")
-        check = check && setErrorText(v.signin_name_input, !InputUtil.isEmail(email), "이메일 형식이 아닙니다.")
+        check = check && setErrorText(v.signin_name_input, !InputCheckUtils.isEmail(email), "이메일 형식이 아닙니다.")
         check = check && setErrorText(v.signin_pw_input, pw.isEmpty(), "비밀번호를 입력해주세요")
-        check = check && setErrorText(v.signin_pw_input, !InputUtil.isValidPW(pw), "최소 6자리의 비밀번호를 입력해주세요.")
+        check = check && setErrorText(v.signin_pw_input, !InputCheckUtils.isValidPW(pw), "최소 6자리의 비밀번호를 입력해주세요.")
 
         return check
     }

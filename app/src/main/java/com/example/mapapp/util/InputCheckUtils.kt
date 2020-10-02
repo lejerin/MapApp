@@ -5,7 +5,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-object InputUtil {
+object InputCheckUtils {
 
     fun setErrorText(view: TextInputLayout, isNotOk: Boolean, message: String) : Boolean{
 

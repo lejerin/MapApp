@@ -3,17 +3,17 @@ package com.example.mapapp.ui.post
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mapapp.data.login.User
+
 import kotlinx.coroutines.Job
 
 class PostViewModel(
 ) : ViewModel() {
 
     private lateinit var job: Job
-
-    private val _loginData = MutableLiveData<User>()
-    val loginResponseData : LiveData<User>
-        get() = _loginData
+//
+//    private val _loginData = MutableLiveData<User>()
+//    val loginResponseData : LiveData<User>
+//        get() = _loginData
 
     fun sendPost(id: String, password: String){
         if(id.isNotEmpty() && password.isNotEmpty()){

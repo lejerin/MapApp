@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.login.LoginActivity">
 
+    <data>
+        <variable
+            name="LoginVM"
+            type="com.example.mapapp.ui.login.LoginViewModel" />
+    </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

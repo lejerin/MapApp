@@ -6,11 +6,10 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import com.example.mapapp.R
-import com.example.mapapp.util.InputUtil.isEmail
-import com.example.mapapp.util.InputUtil.isValidPW
-import com.example.mapapp.util.InputUtil.setErrorText
+import com.example.mapapp.util.InputCheckUtils.isEmail
+import com.example.mapapp.util.InputCheckUtils.isValidPW
+import com.example.mapapp.util.InputCheckUtils.setErrorText
 import kotlinx.android.synthetic.main.signup_fragment_dialog.view.*
 
 
