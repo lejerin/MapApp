@@ -4,11 +4,15 @@ import android.content.Intent
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mapapp.R
 import com.example.mapapp.base.BaseViewModel
 import com.example.mapapp.data.repositories.LoginRepository
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.kakao.sdk.auth.LoginClient
 import com.kakao.sdk.auth.model.OAuthToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +31,7 @@ class LoginViewModel(
     private lateinit var emailSignInDialog: EmailSignInDialog
     private lateinit var emailSignUpDialog: EmailSignUpDialog
 
-    fun emailSignIn(email: String?, password: String?) {
+    private fun emailSignIn(email: String?, password: String?) {
 
         //validating email and password
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
@@ -54,7 +58,7 @@ class LoginViewModel(
         addDisposable(disposable)
     }
 
-    fun emailSignUp(email: String?, password: String?) {
+    private fun emailSignUp(email: String?, password: String?) {
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             authListener?.onFailure(2, "Please input all values")
             return
@@ -117,20 +121,6 @@ class LoginViewModel(
     }
 
 
-    val kakaoCallback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-
-        if (error != null) {
-            Log.e(TAG, "로그인 실패", error)
-            authListener?.onFailure(4, error.message.toString())
-        }
-
-        else if (token != null) {
-
-            Log.i(TAG, "로그인 성공 ${token.accessToken}")
-            authListener?.onSuccess(4)
-        }
-
-    }
 
 
     fun showSignInDialog(view: View) {
@@ -152,6 +142,55 @@ class LoginViewModel(
     override fun inputSignUpData(email: String, pw: String) {
         emailSignUp(email, pw)
     }
+
+
+    private lateinit var googleSignInClient : GoogleSignInClient
+    private val RC_SIGN_IN = 9001
+
+    fun googleSignIn(v: View){
+
+        val activity = v.context as AppCompatActivity
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(activity.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(activity, gso)
+
+        val signInIntent = googleSignInClient.signInIntent
+        activity.startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+
+
+     fun kakaoSignIn(v: View){
+        // 로그인 공통 callback 구성
+
+        val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+
+            if (error != null) {
+                Log.e(TAG, "로그인 실패", error)
+                authListener?.onFailure(4, error.message.toString())
+            }
+
+            else if (token != null) {
+
+                Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                authListener?.onSuccess(4)
+            }
+
+        }
+
+        val context = v.context
+
+        // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+        if (LoginClient.instance.isKakaoTalkLoginAvailable(context)) {
+            LoginClient.instance.loginWithKakaoTalk(context, callback = callback)
+        } else {
+            LoginClient.instance.loginWithKakaoAccount(context, callback = callback)
+        }
+    }
+
 
 
 }

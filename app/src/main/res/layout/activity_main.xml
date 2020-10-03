@@ -48,7 +48,7 @@
                 android:scaleType="fitCenter"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/home_img" />
+                app:srcCompat="@drawable/ic_place" />
 
             <ImageButton
                 android:id="@+id/btn_like"
@@ -57,7 +57,7 @@
                 android:scaleType="fitCenter"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/home_img"  />
+                app:srcCompat="@drawable/ic_time"  />
 
             <ImageButton
                 android:layout_width="0dp"

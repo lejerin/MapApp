@@ -55,11 +55,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:text="이메일로 로그인"
         android:onClick="@{(v) -> loginVM.showSignInDialog(v)}"
+        android:text="이메일로 로그인"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view" />
+        app:layout_constraintTop_toTopOf="@+id/view"
+        app:layout_constraintVertical_bias="1.0" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/btn_sign_facebook"
@@ -83,6 +84,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
+        android:onClick="@{(v) -> loginVM.googleSignIn(v)}"
         android:id="@+id/btn_fake_google"
         android:layout_width="wrap_content"
         android:layout_height="55dp"
@@ -96,6 +98,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
+        android:onClick="@{(v) -> loginVM.kakaoSignIn(v)}"
         android:id="@+id/btn_sign_kakao"
         android:layout_width="wrap_content"
         android:layout_height="55dp"

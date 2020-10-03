@@ -41,7 +41,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
     }
 
     //구글 로그인
-    private lateinit var googleSignInClient : GoogleSignInClient
     private val RC_SIGN_IN = 9001
 
     //페이스북 로그인
@@ -50,7 +49,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
 
     override fun initStartView() {
 
-        initLoginGoogle()
         initLoginFacebook()
     }
 
@@ -66,11 +64,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
     }
 
     override fun initAfterBinding() {
-        btn_signup.setOnClickListener(this)
-        btn_signin.setOnClickListener(this)
         btn_fake_facebook.setOnClickListener(this)
-        btn_fake_google.setOnClickListener(this)
-        btn_sign_kakao.setOnClickListener(this)
     }
 
     override fun onStarted() {
@@ -113,31 +107,12 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
 
     override fun onClick(v: View) {
         when(v.id){
-            R.id.btn_fake_google -> {
-                googleSignIn()
-            }
             R.id.btn_fake_facebook -> {
                 btn_sign_facebook.performClick()
-            }
-            R.id.btn_sign_kakao -> {
-                signInKakao()
             }
         }
     }
 
-
-    private fun initLoginGoogle(){
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-    }
-
-    private fun googleSignIn() {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -172,22 +147,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
         })
 
     }
-
-
-
-    private fun signInKakao(){
-        // 로그인 공통 callback 구성
-
-        val callback = viewModel.kakaoCallback
-
-        // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
-        if (LoginClient.instance.isKakaoTalkLoginAvailable(this)) {
-            LoginClient.instance.loginWithKakaoTalk(this, callback = callback)
-        } else {
-            LoginClient.instance.loginWithKakaoAccount(this, callback = callback)
-        }
-    }
-
 
 
     private fun setLoginPlatform(value: String){

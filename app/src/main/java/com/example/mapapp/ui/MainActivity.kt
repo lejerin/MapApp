@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
     private lateinit var selectedBtn: ImageButton
     private var selectedNum = 0
 
-    private val images = listOf<Int>(R.drawable.home_img, R.drawable.home_img ,R.drawable.home_img , R.drawable.ic_baseline_settings_24)
-    private val vectors = listOf<Int>(R.drawable.home_anim, R.drawable.home_anim ,R.drawable.home_anim , R.drawable.setting_anim)
+    private val images = listOf<Int>(R.drawable.ic_place, R.drawable.ic_time ,R.drawable.home_img , R.drawable.ic_baseline_settings_24)
+    private val vectors = listOf<Int>(R.drawable.map_anim, R.drawable.time_anim ,R.drawable.home_anim , R.drawable.setting_anim)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
                 setBtnAnimation(fab, R.drawable.fab_icon)
                 val intent = Intent(this, PostActivity::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.horizon_enter,R.anim.horizon_exit)
             }
             R.id.btn_home -> {
                 toggleBtn(btn_home, 0)
@@ -71,7 +72,6 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
             R.id.btn_setting -> {
                 toggleBtn(btn_setting, 3)
                 setFragment(settingFragment)
-                System.out.println("cdd")
             }
         }
     }

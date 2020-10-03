@@ -1,13 +1,14 @@
 package com.example.mapapp.ui.post
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.view.View
 import com.example.mapapp.base.BaseViewModel
-import com.example.mapapp.data.repositories.LoginRepository
 import com.example.mapapp.data.repositories.PostRepository
-
+import com.example.mapapp.util.getActivity
 import kotlinx.coroutines.Job
+
 
 class PostViewModel(
     private val repository: PostRepository
@@ -33,8 +34,10 @@ class PostViewModel(
     }
 
 
-
-
+    fun activityFinish(v: View) {
+        val activity = v.context.getActivity()
+        activity?.finish()
+    }
 
 
 

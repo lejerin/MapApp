@@ -80,6 +80,7 @@
 
 
                     <ImageButton
+                        android:onClick="@{(v) -> postVM.activityFinish(v)}"
                         android:layout_marginLeft="16dp"
                         android:tint="@color/white"
                         android:id="@+id/imageButton3"
@@ -92,7 +93,7 @@
 
 
                     <TextView
-                        android:text="2020.10.01(목)"
+                        android:text="2020.10.01(목) 10:00"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:layout_centerInParent="true"
@@ -121,8 +122,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -136,17 +136,17 @@
 
 
                 <EditText
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="10dp"
                     android:id="@+id/editTextTextPersonName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
                     android:background="@android:color/transparent"
                     android:ems="10"
                     android:hint="제목"
-                    android:textSize="20sp"
                     android:inputType="textPersonName"
                     android:padding="5dp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -180,45 +180,34 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view3" />
+
+                <ImageView
+                    android:id="@+id/btn_add_photo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
+                    app:srcCompat="@drawable/rounded_gray_box" />
+
+                <ImageView
+                    android:clickable="false"
+                    android:id="@+id/imageView2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_add_photo"
+                    app:layout_constraintStart_toStartOf="@+id/btn_add_photo"
+                    app:layout_constraintTop_toTopOf="@+id/btn_add_photo"
+                    app:srcCompat="@drawable/ic_baseline_add_photo_alternate_24" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
 
     </androidx.core.widget.NestedScrollView>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="bottom|end"
-        android:background="@color/white">
-
-
-        <ImageButton
-            android:padding="3dp"
-            android:id="@+id/imageButton4"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="16dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/image" />
-
-        <ImageButton
-            android:padding="5dp"
-            android:id="@+id/imageButton5"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="16dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/sort1" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
