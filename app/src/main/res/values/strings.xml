@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">MapApp</string>
-    <string name="facebook_app_id">3280358242072392</string> <string name="fb_login_protocol_scheme">fb3280358242072392</string>
+    <string name="facebook_app_id">3280358242072392</string>
+    <string name="fb_login_protocol_scheme">fb3280358242072392</string>
     <string name="kakao_app_key">724c857745809acea1b6ef3211331780</string>
+
+    <string name="naver_map_client_id">hkyq9q7769</string>
 </resources>

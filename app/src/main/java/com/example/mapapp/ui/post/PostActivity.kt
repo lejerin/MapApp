@@ -1,19 +1,20 @@
 package com.example.mapapp.ui.post
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
+import android.Manifest
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.mapapp.R
 import com.example.mapapp.base.BaseActivity
-import com.example.mapapp.data.repositories.LoginRepository
 import com.example.mapapp.data.repositories.PostRepository
-import com.example.mapapp.databinding.ActivityLoginBinding
 import com.example.mapapp.databinding.ActivityPostBinding
-import com.example.mapapp.ui.login.*
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.android.synthetic.main.activity_post.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
+
 
 class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware {
     override val layoutResourceId: Int
@@ -25,7 +26,12 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware {
 
     private val TAG = "PostActivity"
 
+
+
     override fun initStartView() {
+
+//        NaverMapSdk.getInstance(this).client = NaverMapSdk.NaverCloudPlatformClient("hkyq9q7769")
+//        mLocationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
 
     }
 
@@ -39,6 +45,13 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware {
     }
 
     override fun initAfterBinding() {
+//        val fm = supportFragmentManager
+//        val mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
+//            ?: MapFragment.newInstance().also {
+//                fm.beginTransaction().add(R.id.map, it).commit()
+//            }
+//
+//        mapFragment.getMapAsync(this)
 
     }
 
@@ -47,5 +60,6 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware {
 
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
     }
+
 
 }
