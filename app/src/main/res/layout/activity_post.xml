@@ -42,22 +42,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp">
 
+
+                <fragment
+                    android:id="@+id/mapFragment"
+                    android:name="com.naver.maps.map.MapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
                 <View
                     android:id="@+id/view6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/background_black" />
 
-                <TextView
-                    android:id="@+id/map_info_text"
-                    android:textSize="20sp"
-                    android:layout_centerInParent="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="클릭해서 위치를 등록해주세요"
-                    android:onClick="@{(v) -> postVM.showLocationActivity(v)}"
-                    />
 
             </RelativeLayout>
 

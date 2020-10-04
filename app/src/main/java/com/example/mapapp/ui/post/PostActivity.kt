@@ -1,22 +1,21 @@
 package com.example.mapapp.ui.post
 
 import android.Manifest
+import android.view.Gravity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.mapapp.R
 import com.example.mapapp.base.BaseActivity
 import com.example.mapapp.data.repositories.PostRepository
 import com.example.mapapp.databinding.ActivityPostBinding
-import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
-import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.android.synthetic.main.activity_post.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 
 
-class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware {
+class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware , OnMapReadyCallback{
     override val layoutResourceId: Int
         get() = R.layout.activity_post
 
@@ -26,12 +25,17 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware {
 
     private val TAG = "PostActivity"
 
-
+    private val PERMISSION_REQUEST_CODE = 100
+    private val PERMISSIONS = arrayOf<String>(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+    private lateinit var  mLocationSource: FusedLocationSource
 
     override fun initStartView() {
 
-//        NaverMapSdk.getInstance(this).client = NaverMapSdk.NaverCloudPlatformClient("hkyq9q7769")
-//        mLocationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
+        NaverMapSdk.getInstance(this).client = NaverMapSdk.NaverCloudPlatformClient("hkyq9q7769")
+        mLocationSource = FusedLocationSource(this, PERMISSION_REQUEST_CODE)
 
     }
 
@@ -45,13 +49,9 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware {
     }
 
     override fun initAfterBinding() {
-//        val fm = supportFragmentManager
-//        val mapFragment = fm.findFragmentById(R.id.map) as MapFragment?
-//            ?: MapFragment.newInstance().also {
-//                fm.beginTransaction().add(R.id.map, it).commit()
-//            }
-//
-//        mapFragment.getMapAsync(this)
+
+        (mapFragment as MapFragment).getMapAsync(this)
+
 
     }
 
@@ -59,6 +59,24 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware {
         super.finish()
 
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
+    }
+
+    override fun onMapReady(p0: NaverMap) {
+        p0.locationSource = mLocationSource
+        p0.locationTrackingMode = LocationTrackingMode.Follow
+
+
+        p0.uiSettings.logoGravity = Gravity.RIGHT or Gravity.BOTTOM
+        val margin = p0.uiSettings.logoMargin
+        p0.uiSettings.setLogoMargin(0, 0, margin[2]+ 40 , margin[3] + 60)
+
+        p0.uiSettings.setAllGesturesEnabled(false)
+
+        p0.uiSettings.isLocationButtonEnabled = true
+        // 권한확인. 결과는 onRequestPermissionsResult 콜백 매서드 호출
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_CODE)
+
+
     }
 
 
