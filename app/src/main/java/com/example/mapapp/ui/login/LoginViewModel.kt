@@ -14,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.kakao.sdk.auth.LoginClient
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.user.UserApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -49,11 +50,12 @@ class LoginViewModel(
             .subscribe({
                 //sending a success callback
                 emailSignInDialog.receiveResult(true, "")
-                authListener?.onSuccess(1)
+                authListener?.onSuccess(1, it)
             }, {
                 //sending a failure callback
                 emailSignInDialog.receiveResult(false,
                     "Authentication failed.\n${it.message!!}")
+                authListener?.onFailure(1, it.message!!)
             })
         addDisposable(disposable)
     }
@@ -69,7 +71,7 @@ class LoginViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 emailSignUpDialog.receiveResult(true, "")
-                authListener?.onSuccess(2)
+                authListener?.onSuccess(2, it)
             }, {
                 emailSignUpDialog.receiveResult(false,
                     "Authentication failed.\n${it.message!!}")
@@ -83,7 +85,7 @@ class LoginViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                authListener?.onSuccess(3)
+                authListener?.onSuccess(3, it)
             }, {
                 authListener?.onFailure(3, it.message!!)
             })
@@ -96,7 +98,7 @@ class LoginViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                authListener?.onSuccess(4)
+                authListener?.onSuccess(4, it)
             }, {
                 authListener?.onFailure(4, it.message!!)
             })
@@ -174,9 +176,8 @@ class LoginViewModel(
             }
 
             else if (token != null) {
-
                 Log.i(TAG, "로그인 성공 ${token.accessToken}")
-                authListener?.onSuccess(4)
+                getKakaoUserId()
             }
 
         }
@@ -192,5 +193,18 @@ class LoginViewModel(
     }
 
 
+    private fun getKakaoUserId(){
+        UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
+            if (error != null) {
+                Log.e(TAG, "토큰 정보 보기 실패", error)
+            }
+            else if (tokenInfo != null) {
+                Log.i(TAG, "토큰 정보 보기 성공" +
+                        "\n회원번호: ${tokenInfo.id}" +
+                        "\n만료시간: ${tokenInfo.expiresIn} 초")
 
+                authListener?.onSuccess(4, tokenInfo.id.toString())
+            }
+        }
+    }
 }

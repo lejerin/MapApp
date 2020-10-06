@@ -1,17 +1,17 @@
 package com.example.mapapp.data.repositories
 
-import android.annotation.SuppressLint
-import android.util.Log
-import android.widget.Toast
-import com.example.mapapp.util.startMainActivity
+import com.example.mapapp.data.models.LocalMapData
 import com.facebook.AccessToken
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import io.reactivex.Completable
-import kotlinx.android.synthetic.main.activity_login.*
-import java.util.concurrent.Executor
+import io.reactivex.Single
+import io.reactivex.SingleEmitter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 
 class LoginRepository() {
@@ -21,48 +21,52 @@ class LoginRepository() {
     }
 
 
-    fun login(email: String, password: String) = Completable.create { emitter ->
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (!emitter.isDisposed) {
-                if (it.isSuccessful)
-                    emitter.onComplete()
-                else
-                    emitter.onError(it.exception!!)
-            }
+    fun login(email: String, password: String) : Single<String> = Single.create { subscriber ->
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener {
+                    if (!subscriber.isDisposed) {
+                        if (it.isSuccessful)
+                            subscriber.onSuccess(it.result?.user?.uid!!)
+                        else
+                            subscriber.onError(Throwable(it.exception))
+                    }
+                }
         }
+
+    fun register(email: String, password: String) : Single<String> = Single.create { subscriber ->
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                if (!subscriber.isDisposed) {
+                    if (it.isSuccessful)
+                        subscriber.onSuccess(it.result?.user?.uid!!)
+                    else
+                        subscriber.onError(Throwable(it.exception))
+                }
+            }
     }
 
-    fun register(email: String, password: String) = Completable.create { emitter ->
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (!emitter.isDisposed) {
-                if (it.isSuccessful)
-                    emitter.onComplete()
-                else
-                    emitter.onError(it.exception!!)
-            }
-        }
-    }
 
-    fun firebaseAuthWithGoogle(idToken: String) = Completable.create { emitter ->
+    fun firebaseAuthWithGoogle(idToken: String) : Single<String> = Single.create { subscriber ->
         firebaseAuth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null))
             .addOnCompleteListener {
-            if (!emitter.isDisposed) {
-                if (it.isSuccessful)
-                    emitter.onComplete()
-                else
-                    emitter.onError(it.exception!!)
+                if (!subscriber.isDisposed) {
+                    if (it.isSuccessful)
+                        subscriber.onSuccess(it.result?.user?.uid!!)
+                    else
+                        subscriber.onError(Throwable(it.exception))
+                }
             }
-        }
     }
 
-    fun facebookHandleFacebookAccessToken(token: AccessToken) = Completable.create { emitter ->
+
+    fun facebookHandleFacebookAccessToken(token: AccessToken) : Single<String> = Single.create { subscriber ->
         firebaseAuth.signInWithCredential(FacebookAuthProvider.getCredential(token.token))
             .addOnCompleteListener {
-                if (!emitter.isDisposed) {
+                if (!subscriber.isDisposed) {
                     if (it.isSuccessful)
-                        emitter.onComplete()
+                        subscriber.onSuccess(it.result?.user?.uid!!)
                     else
-                        emitter.onError(it.exception!!)
+                        subscriber.onError(Throwable(it.exception))
                 }
             }
     }
