@@ -12,6 +12,6 @@ method
 interface EmailSignListener {
 
     fun onStarted()
-    fun onSuccess(method: Int)
+    fun onSuccess(method: Int, uid: String?)
     fun onFailure(method: Int, message: String)
 }

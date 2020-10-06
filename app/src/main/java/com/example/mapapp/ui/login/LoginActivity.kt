@@ -71,7 +71,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
         //progressbar.visibility = View.VISIBLE
     }
 
-    override fun onSuccess(method: Int) {
+    override fun onSuccess(method: Int, uid: String?) {
         //  progressbar.visibility = View.GONE
 
         setLoginPlatform(
@@ -83,6 +83,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
             }
         )
 
+        System.out.println("uid$uid")
         startMainActivity()
 
     }
@@ -97,6 +98,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() , View.OnClickListene
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
+        val uid = currentUser?.uid
         if(currentUser != null){
             Toast.makeText(this, "자동 로그인 성공", Toast.LENGTH_SHORT).show()
             startMainActivity()
