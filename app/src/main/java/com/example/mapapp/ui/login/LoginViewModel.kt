@@ -197,6 +197,7 @@ class LoginViewModel(
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if (error != null) {
                 Log.e(TAG, "토큰 정보 보기 실패", error)
+                authListener?.onFailure(4, error.message.toString())
             }
             else if (tokenInfo != null) {
                 Log.i(TAG, "토큰 정보 보기 성공" +
