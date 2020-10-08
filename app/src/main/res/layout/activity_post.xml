@@ -183,28 +183,48 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view3" />
 
-                <ImageView
-                    android:id="@+id/btn_add_photo"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
-                    app:srcCompat="@drawable/rounded_gray_box" />
+                    app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2">
 
-                <ImageView
-                    android:clickable="false"
-                    android:id="@+id/imageView2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/btn_add_photo"
-                    app:layout_constraintStart_toStartOf="@+id/btn_add_photo"
-                    app:layout_constraintTop_toTopOf="@+id/btn_add_photo"
-                    app:srcCompat="@drawable/ic_baseline_add_photo_alternate_24" />
+                    <LinearLayout
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/btn_add_photo"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:scaleType="fitCenter"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/rounded_gray_box" />
+
+                            <ImageView
+                                android:id="@+id/imageView2"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:clickable="false"
+                                app:layout_constraintBottom_toBottomOf="@+id/btn_add_photo"
+                                app:layout_constraintEnd_toEndOf="@+id/btn_add_photo"
+                                app:layout_constraintStart_toStartOf="@+id/btn_add_photo"
+                                app:layout_constraintTop_toTopOf="@+id/btn_add_photo"
+                                app:srcCompat="@drawable/ic_baseline_add_photo_alternate_24" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+                </HorizontalScrollView>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 

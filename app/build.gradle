@@ -106,4 +106,7 @@ dependencies {
     //sliding panel
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
 
+    //tedpermission
+    implementation 'gun0912.ted:tedpermission:2.2.3'
+
 }

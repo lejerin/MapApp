@@ -1,13 +1,17 @@
 package com.example.mapapp.ui.post
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.view.Gravity
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.mapapp.R
 import com.example.mapapp.base.BaseActivity
 import com.example.mapapp.data.repositories.PostRepository
 import com.example.mapapp.databinding.ActivityPostBinding
+import com.example.mapapp.util.CameraUtil
 import com.naver.maps.map.*
 import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.android.synthetic.main.activity_post.*
@@ -24,6 +28,11 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware , OnMapRe
     private lateinit var viewModel: PostViewModel
 
     private val TAG = "PostActivity"
+
+
+    //사진 찍기
+    val REQUEST_IMAGE_CAPTURE = 1
+    val REQUEST_IMAGE_PICK = 10
 
     private val PERMISSION_REQUEST_CODE = 100
     private val PERMISSIONS = arrayOf<String>(
@@ -52,32 +61,51 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware , OnMapRe
 
         (mapFragment as MapFragment).getMapAsync(this)
 
+        viewDataBinding.btnAddPhoto.setOnClickListener{
+            viewModel.setPermission(it)
+        }
 
     }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            //사진찍은거 파일로 저장하고 가져오기
+            val uri = CameraUtil.getInstance(this).makeBitmap(viewDataBinding.btnAddPhoto)
+            CameraUtil.getInstance(this).setImageView(viewDataBinding.btnAddPhoto, uri)
+
+        }
+
+        //사진을 갖고왔을 때
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_IMAGE_PICK && data != null) {
+            CameraUtil.getInstance(this).setImageView(viewDataBinding.btnAddPhoto, data.data!!)
+
+        }
+    }
+
+
+    override fun onMapReady(p0: NaverMap) {
+        p0.locationSource = mLocationSource
+        p0.locationTrackingMode = LocationTrackingMode.Follow
+
+        p0.uiSettings.logoGravity = Gravity.RIGHT or Gravity.BOTTOM
+        val margin = p0.uiSettings.logoMargin
+        p0.uiSettings.setLogoMargin(0, 0, margin[2]+ 40 , margin[3] + 60)
+        p0.uiSettings.setAllGesturesEnabled(false)
+        p0.uiSettings.isLocationButtonEnabled = true
+
+        // 권한확인. 결과는 onRequestPermissionsResult 콜백 매서드 호출
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_CODE)
+
+    }
+
 
     override fun finish() {
         super.finish()
 
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
     }
-
-    override fun onMapReady(p0: NaverMap) {
-        p0.locationSource = mLocationSource
-        p0.locationTrackingMode = LocationTrackingMode.Follow
-
-
-        p0.uiSettings.logoGravity = Gravity.RIGHT or Gravity.BOTTOM
-        val margin = p0.uiSettings.logoMargin
-        p0.uiSettings.setLogoMargin(0, 0, margin[2]+ 40 , margin[3] + 60)
-
-        p0.uiSettings.setAllGesturesEnabled(false)
-
-        p0.uiSettings.isLocationButtonEnabled = true
-        // 권한확인. 결과는 onRequestPermissionsResult 콜백 매서드 호출
-        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_REQUEST_CODE)
-
-
-    }
-
 
 }

@@ -5,7 +5,12 @@
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 네이버 map 자기 위치 표시하기 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" /><!--카메라 권한-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!--파일 쓰기 권한-->
+    <uses-feature android:name="android.hardware.camera" android:required="true"/><!--카메라 기능 사용-->
+
 
     <application
         android:name=".util.GlobalApplication"
@@ -68,6 +73,16 @@
                     android:scheme="kakao[네이티브앱 키]" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.mapapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/camera_path"></meta-data>
+        </provider>
     </application>
 
 </manifest>
