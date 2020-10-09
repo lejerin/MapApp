@@ -70,7 +70,6 @@ class CameraUtil  {
 
     fun setImageView(btnAddPhoto: ImageView, uri: Uri){
 
-
         val getBitmap = decodeSampledBitmapFromResource(uri, 300, 300)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             btnAddPhoto.setImageBitmap(imgRotate(uri, getBitmap))

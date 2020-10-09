@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import android.view.Gravity
 import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.mapapp.R
@@ -17,9 +19,9 @@ import com.naver.maps.map.util.FusedLocationSource
 import kotlinx.android.synthetic.main.activity_post.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
+import com.example.mapapp.ui.post.CustomViewPhoto.ButtonClickListener
 
-
-class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware , OnMapReadyCallback{
+class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware , OnMapReadyCallback, ButtonClickListener{
     override val layoutResourceId: Int
         get() = R.layout.activity_post
 
@@ -61,26 +63,32 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware , OnMapRe
 
         (mapFragment as MapFragment).getMapAsync(this)
 
-        viewDataBinding.btnAddPhoto.setOnClickListener{
-            viewModel.setPermission(it)
-        }
+        viewDataBinding.customView.setReportListener(this)
 
     }
 
+    lateinit var clickImg: ImageView
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             //사진찍은거 파일로 저장하고 가져오기
-            val uri = CameraUtil.getInstance(this).makeBitmap(viewDataBinding.btnAddPhoto)
-            CameraUtil.getInstance(this).setImageView(viewDataBinding.btnAddPhoto, uri)
+            val uri = CameraUtil.getInstance(this).makeBitmap(clickImg)
+            CameraUtil.getInstance(this).setImageView(clickImg, uri)
 
+            if(viewDataBinding.customView.getImgSize() < 4){
+                viewDataBinding.customView.addBtn()
+            }
         }
 
         //사진을 갖고왔을 때
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_IMAGE_PICK && data != null) {
-            CameraUtil.getInstance(this).setImageView(viewDataBinding.btnAddPhoto, data.data!!)
+            CameraUtil.getInstance(this).setImageView(clickImg, data.data!!)
+
+            if(viewDataBinding.customView.getImgSize() < 4){
+                viewDataBinding.customView.addBtn()
+            }
 
         }
     }
@@ -106,6 +114,14 @@ class PostActivity : BaseActivity<ActivityPostBinding>() , KodeinAware , OnMapRe
         super.finish()
 
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left)
+    }
+
+    override fun onClick(i: Int, v: View) {
+        clickImg = v as ImageView
+        if(viewDataBinding.customView.getImgSize() <= 4){
+            viewModel.setPermission(v)
+        }
+
     }
 
 }

@@ -1,14 +1,12 @@
 package com.example.mapapp.ui.post
 
 import android.content.Context
-import android.net.Uri
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatImageView
 import com.example.mapapp.R
-import com.example.mapapp.util.CameraUtil
 import kotlinx.android.synthetic.main.custom_view_add_photo.view.*
 import java.util.*
 
@@ -27,7 +25,7 @@ open class CustomViewPhoto @JvmOverloads constructor(context: Context, attrs: At
     private var clickListener: ButtonClickListener? = null
 
     interface ButtonClickListener {
-        fun onClick(i: Int)
+        fun onClick(i: Int, v: View)
     }
 
     open fun setReportListener(listener: ButtonClickListener) {
@@ -36,36 +34,43 @@ open class CustomViewPhoto @JvmOverloads constructor(context: Context, attrs: At
 
     init{
         inflate(context, R.layout.custom_view_add_photo, this)
-        btnList.add(img)
-
+        addBtn()
     }
 
 
-    open fun addBtn(uri: Uri) {
+    open fun addBtn() {
 
-            //4개 이하면 추가
-            val createdButton = ImageButton(context)
-             CameraUtil.getInstance(context).setImageView(createdButton, uri)
-            val params = LayoutParams(
-                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT
-            )
-            params.setMargins(0, 0, 5, 0)
-            createdButton.layoutParams = params
-            createdButton.setOnClickListener { v -> selectedBtn(v) }
-            btnList.add(createdButton)
-            layout.addView(createdButton)
+
+            layout.post{
+                val createdButton = AppCompatImageView(context)
+                createdButton.id = btnList.size + 100
+                val width = (layout.measuredWidth - 40) / 4
+                System.out.println("추가" + width)
+                val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT)
+                params.width = width
+                params.setMargins(5, 0, 5, 0)
+                createdButton.layoutParams = params
+                createdButton.scaleType = ImageView.ScaleType.CENTER_CROP
+                createdButton.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24)
+                createdButton.setBackgroundResource(R.drawable.rounded_gray_box)
+                createdButton.clipToOutline = true
+                createdButton.setOnClickListener { v -> selectedBtn(v) }
+                btnList.add(createdButton)
+                layout.addView(createdButton)
+            }
+
 
     }
 
      open fun selectedBtn(v: View) {
         for (i in btnList.indices) {
             if (btnList[i].id == v.id) {
-                clickListener!!.onClick(i)
-            } else {
-                btnList[i].isSelected = false
+                System.out.println("클릭" + i)
+                clickListener!!.onClick(i, btnList[i])
             }
         }
     }
 
+    open fun getImgSize() = btnList.size
 
 }
