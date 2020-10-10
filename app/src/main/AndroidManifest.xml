@@ -70,7 +70,7 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme="kakao[네이티브앱 키]" />
+                    android:scheme="kakao724c857745809acea1b6ef3211331780" />
             </intent-filter>
         </activity>
 
