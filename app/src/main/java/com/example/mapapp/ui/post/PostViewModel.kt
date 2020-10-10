@@ -11,7 +11,6 @@ import com.example.mapapp.base.BaseViewModel
 import com.example.mapapp.data.repositories.PostRepository
 import com.example.mapapp.util.CameraUtil
 import com.example.mapapp.util.getActivity
-import com.example.mapapp.util.startLocationActivity
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import kotlinx.coroutines.Job
@@ -93,9 +92,9 @@ class PostViewModel(
         activity?.finish()
     }
 
-    fun showLocationActivity(v: View){
-        v.context.startLocationActivity()
-    }
+//    fun showLocationActivity(v: View){
+//        v.context.startLocationActivity()
+//    }
 
 
     override fun onCleared() {
