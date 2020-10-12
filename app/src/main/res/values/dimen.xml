@@ -2,4 +2,6 @@
 <resources>
     <dimen name="sign_dialog_edit_text_size">16dp</dimen>
 
+    <dimen name="date_picker_circle_size">60dp</dimen>
+    <dimen name="date_picker_circle_margin">15dp</dimen>
 </resources>

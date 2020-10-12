@@ -1,25 +1,53 @@
 package com.example.mapapp.ui.map
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.example.mapapp.R
+import com.example.mapapp.base.BaseFragment
+import com.example.mapapp.data.repositories.MapRepository
+import com.example.mapapp.databinding.FragmentMapBinding
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.NaverMapSdk
+import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.Marker
+import kotlinx.android.synthetic.main.fragment_map.*
+
+class MapFragment : BaseFragment<FragmentMapBinding>() , OnMapReadyCallback {
+    override val layoutResourceId: Int
+        get() = R.layout.fragment_map
 
 
-class MapFragment : Fragment() {
+    private lateinit var factory: MapViewModelFactory
+    private lateinit var viewModel: MapViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    private val TAG = "TimeFragment"
+
+    override fun initStartView() {
+        NaverMapSdk.getInstance(context!!).client = NaverMapSdk.NaverCloudPlatformClient("hkyq9q7769")
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun initDataBinding() {
+        val repository = MapRepository()
+        factory = MapViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory).get(MapViewModel::class.java)
+        viewDataBinding.mapVM = viewModel
+    }
 
+    override fun initAfterBinding() {
+
+        val childFragment = childFragmentManager.findFragmentByTag("main_map_fragment") as? MapFragment ?: return
+        childFragment.getMapAsync(this)
+    }
+
+    override fun onMapReady(p0: NaverMap) {
+
+
+        val marker = Marker()
+        marker.position = LatLng(37.5670135, 126.9783740)
+        marker.map = p0
 
     }
+
 
 }

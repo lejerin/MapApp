@@ -40,11 +40,11 @@ class TimeFragment : BaseFragment<FragmentTimeBinding>() {
         factory = TimeViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(TimeViewModel::class.java)
         viewDataBinding.timeVM = viewModel
-        System.out.println("initDataBinding")
+
     }
 
     override fun initAfterBinding() {
-        System.out.println("initAfterBinding")
+
         viewModel.getTimeList()
     }
 
