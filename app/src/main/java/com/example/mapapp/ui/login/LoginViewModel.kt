@@ -105,9 +105,7 @@ class LoginViewModel(
         addDisposable(disposable)
     }
 
-    fun receiveGoogleSignResult(
-        data: Intent?
-    ) {
+    fun receiveGoogleSignResult(data: Intent?) {
 
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {

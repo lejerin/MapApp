@@ -44,10 +44,10 @@ class TimeViewModel(
 
     fun getTimeList() {
 
-        timeList.add(TimeData("tt", "tt" ,"cc" , Date()))
-        timeList.add(TimeData("tt", "t1" ,"cc2" , Date()))
-        timeList.add(TimeData("tt", "tt2" ,"c2c" , Date()))
-        timeList.add(TimeData("tt", "tt3" ,"c4c" , Date()))
+        timeList.add(TimeData("제목1", "tt" ,"cc" , Date()))
+        timeList.add(TimeData("제목2", "t1" ,"cc2" , Date()))
+        timeList.add(TimeData("제목3", "tt2" ,"c2c" , Date()))
+        timeList.add(TimeData("제목4", "tt3" ,"c4c" , Date()))
 
     }
 

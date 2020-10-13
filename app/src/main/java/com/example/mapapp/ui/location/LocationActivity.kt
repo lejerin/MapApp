@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_location.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 
+
 class LocationActivity : BaseActivity<ActivityLocationBinding>() , KodeinAware, OnMapReadyCallback,
             MapListAdapter.OnItemClickListener{
     override val layoutResourceId: Int

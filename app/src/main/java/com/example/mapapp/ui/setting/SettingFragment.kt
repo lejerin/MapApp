@@ -43,9 +43,11 @@ class SettingFragment : Fragment() {
         val prefs = context?.getSharedPreferences("Pref", MODE_PRIVATE)
 
         when(prefs?.getString("login", "E")){
+            //이메일 로그아웃
             "E" -> {
                 FirebaseAuth.getInstance().signOut()
             }
+            //카카오 로그아웃
             "K" -> {
                 UserApiClient.instance.logout { error ->
                     if (error != null) {
@@ -56,9 +58,11 @@ class SettingFragment : Fragment() {
                     }
                 }
             }
+            //구글 로그아웃
             "G" -> {
                 Firebase.auth.signOut()
             }
+            //페이스북 로그아웃
             "F" -> {
                 LoginManager.getInstance().logOut();
                 Firebase.auth.signOut()

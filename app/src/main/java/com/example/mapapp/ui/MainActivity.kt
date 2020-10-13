@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.example.mapapp.R
 import com.example.mapapp.ui.map.MapFragment
 import com.example.mapapp.ui.time.TimeFragment
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener {
 
     private fun setFragment(fragment: Fragment) {
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.main_frame, fragment)
+        ft.replace(R.id.main_frame, fragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         ft.commit()
     }
 
