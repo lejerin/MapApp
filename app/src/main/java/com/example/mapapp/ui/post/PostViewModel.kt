@@ -41,9 +41,9 @@ class PostViewModel(
 
 
      fun setPermission(v: View) {
-        val permission = object : PermissionListener {
-            override fun onPermissionGranted() {//설정해 놓은 위험권한(카메라 접근 등)이 허용된 경우 이곳을 실행
-                showChoicePhotoDialog(v.context)
+                    val permission = object : PermissionListener {
+                        override fun onPermissionGranted() {//설정해 놓은 위험권한(카메라 접근 등)이 허용된 경우 이곳을 실행
+                            showChoicePhotoDialog(v.context)
 
             }
 
